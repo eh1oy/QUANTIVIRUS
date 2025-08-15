@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="#B71C1C"
+    android:padding="32dp">
+
+    <ImageView
+        android:id="@+id/virus_icon"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="24dp" />
+
+    <TextView
+        android:id="@+id/virus_app_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Вирус обнаружен!"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:id="@+id/virus_package"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="package.name"
+        android:textSize="18sp"
+        android:textColor="#FFCDD2"
+        android:layout_marginBottom="32dp" />
+
+    <Button
+        android:id="@+id/virus_delete_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Удалить вирус"
+        android:textAllCaps="true"
+        android:backgroundTint="#D32F2F"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:textSize="20sp" />
+
+</LinearLayout> 

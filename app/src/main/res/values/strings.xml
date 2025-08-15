@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">QUANTIVIRUS</string>
+    <string name="appbar_scrolling_view_behavior">com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior</string>
+</resources>

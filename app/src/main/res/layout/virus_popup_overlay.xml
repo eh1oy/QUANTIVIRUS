@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#CC000000">
+
+    <!-- Основной контент поверх затемнения -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:background="@drawable/main_card_background"
+        android:layout_margin="32dp"
+        android:padding="32dp"
+        android:elevation="24dp">
+
+        <!-- Иконка предупреждения -->
+        <ImageView
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/warning_icon_background"
+            android:src="@drawable/ic_warning"
+            android:tint="#FF5722"
+            android:scaleType="centerInside"
+            android:padding="20dp" />
+
+        <!-- Заголовок -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:text="🚨 ВИРУС ОБНАРУЖЕН! 🚨"
+            android:textSize="28sp"
+            android:textColor="#D32F2F"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:fontFamily="sans-serif-medium"
+            android:letterSpacing="0.1" />
+
+        <!-- Информация о приложении -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/info_card_background"
+            android:orientation="vertical"
+            android:padding="24dp"
+            android:elevation="8dp">
+
+            <!-- Иконка и название -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="20dp">
+
+                <ImageView
+                    android:id="@+id/virus_icon"
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
+                    android:layout_marginEnd="20dp"
+                    android:background="@drawable/app_icon_background_rounded"
+                    android:padding="8dp"
+                    android:elevation="4dp" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/virus_app_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Вредоносное приложение"
+                        android:textSize="22sp"
+                        android:textColor="#212121"
+                        android:textStyle="bold"
+                        android:fontFamily="sans-serif-medium" />
+
+                    <TextView
+                        android:id="@+id/virus_package"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="package.name"
+                        android:textSize="16sp"
+                        android:textColor="#757575"
+                        android:layout_marginTop="4dp"
+                        android:fontFamily="monospace" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Сообщение -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:text="⚠️ Это приложение может навредить вашему устройству и вашим данным. Рекомендуется немедленно удалить его."
+                android:textSize="18sp"
+                android:textColor="#424242"
+                android:gravity="center"
+                android:lineSpacingExtra="4dp"
+                android:fontFamily="sans-serif" />
+
+            <!-- Кнопка удаления -->
+            <Button
+                android:id="@+id/virus_delete_button"
+                android:layout_width="match_parent"
+                android:layout_height="72dp"
+                android:text="🗑️ УДАЛИТЬ ВИРУС"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:background="@drawable/delete_button_background"
+                android:textColor="#FFFFFF"
+                android:elevation="8dp"
+                android:stateListAnimator="@null"
+                android:fontFamily="sans-serif-medium" />
+
+        </LinearLayout>
+
+        <!-- Дополнительная информация -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/info_panel_background"
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:elevation="4dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:text="ℹ️ Информация о безопасности"
+                android:textSize="18sp"
+                android:textColor="#2E7D32"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-medium" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="QUANTIVIRUS обнаружил потенциально опасное приложение. После удаления рекомендуется перезагрузить устройство для полной очистки."
+                android:textSize="16sp"
+                android:textColor="#388E3C"
+                android:lineSpacingExtra="2dp"
+                android:fontFamily="sans-serif" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</FrameLayout> 

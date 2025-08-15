@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.QUANTIVIRUS" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Используем конкретные цвета для стабильности -->
+        <item name="colorPrimary">@color/md_theme_light_primary</item>
+        <item name="colorSecondary">@color/md_theme_light_secondary</item>
+        <item name="colorTertiary">@color/md_theme_light_tertiary</item>
+        <item name="android:statusBarColor">@color/md_theme_light_primary</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+</resources>
