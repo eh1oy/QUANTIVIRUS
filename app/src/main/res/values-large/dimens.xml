@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Размеры для больших экранов -->
+    
+    <!-- Отступы -->
+    <dimen name="screen_padding">24dp</dimen>
+    <dimen name="small_margin">12dp</dimen>
+    <dimen name="medium_margin">20dp</dimen>
+    <dimen name="large_margin">32dp</dimen>
+    
+    <!-- Размеры иконок -->
+    <dimen name="virus_icon_size">96dp</dimen>
+    <dimen name="app_icon_size">72dp</dimen>
+    <dimen name="warning_icon_size">120dp</dimen>
+    
+    <!-- Размеры текста -->
+    <dimen name="small_text_size">16sp</dimen>
+    <dimen name="medium_text_size">18sp</dimen>
+    <dimen name="large_text_size">22sp</dimen>
+    <dimen name="xlarge_text_size">26sp</dimen>
+    <dimen name="xxlarge_text_size">32sp</dimen>
+    
+    <!-- Размеры кнопок -->
+    <dimen name="button_min_height">56dp</dimen>
+    <dimen name="button_text_size">18sp</dimen>
+    <dimen name="button_padding">16dp</dimen>
+    
+    <!-- Размеры карточек -->
+    <dimen name="card_corner_radius">20dp</dimen>
+    <dimen name="card_padding">20dp</dimen>
+</resources>

@@ -15,7 +15,7 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="24dp">
+        android:padding="@dimen/screen_padding">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -25,9 +25,9 @@
 
             <!-- Warning Icon -->
             <com.google.android.material.imageview.ShapeableImageView
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:layout_marginBottom="24dp"
+                android:layout_width="@dimen/warning_icon_size"
+                android:layout_height="@dimen/warning_icon_size"
+                android:layout_marginBottom="@dimen/large_margin"
                 android:background="?attr/colorErrorContainer"
                 android:src="@drawable/ic_warning"
                 app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
@@ -48,8 +48,8 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
-                app:cardCornerRadius="28dp"
+                android:layout_marginBottom="@dimen/large_margin"
+                app:cardCornerRadius="@dimen/card_corner_radius"
                 app:cardElevation="8dp"
                 app:strokeWidth="2dp"
                 app:strokeColor="?attr/colorError">
@@ -58,7 +58,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="24dp">
+                    android:padding="@dimen/card_padding">
 
                     <!-- App Icon and Name -->
                     <LinearLayout
@@ -70,9 +70,9 @@
 
                         <com.google.android.material.imageview.ShapeableImageView
                             android:id="@+id/virus_icon"
-                            android:layout_width="64dp"
-                            android:layout_height="64dp"
-                            android:layout_marginEnd="16dp"
+                            android:layout_width="@dimen/app_icon_size"
+                            android:layout_height="@dimen/app_icon_size"
+                            android:layout_marginEnd="@dimen/medium_margin"
                             android:background="?attr/colorSurfaceVariant"
                             app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Medium" />
 
@@ -107,7 +107,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="24dp"
+                        android:layout_marginBottom="@dimen/large_margin"
                         android:text="⚠️ Это приложение может навредить вашему устройству и вашим данным. Рекомендуется немедленно удалить его."
                         android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
                         android:textColor="?attr/colorOnSurface"
@@ -117,7 +117,8 @@
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/virus_delete_button"
                         android:layout_width="match_parent"
-                        android:layout_height="64dp"
+                        android:layout_height="wrap_content"
+                        android:minHeight="@dimen/button_min_height"
                         android:text="🗑️ УДАЛИТЬ ВИРУС"
                         android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
                         android:textStyle="bold"

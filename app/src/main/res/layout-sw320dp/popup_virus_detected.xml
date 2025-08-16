@@ -3,13 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/virus_background_gradient">
+    android:background="?attr/colorSurface">
+
+    <!-- Background with gradient -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/virus_background_gradient" />
 
     <!-- Main Content -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="@dimen/screen_padding">
+        android:padding="8dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -19,9 +25,9 @@
 
             <!-- Warning Icon -->
             <com.google.android.material.imageview.ShapeableImageView
-                android:layout_width="@dimen/warning_icon_size"
-                android:layout_height="@dimen/warning_icon_size"
-                android:layout_marginBottom="@dimen/large_margin"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginBottom="12dp"
                 android:background="?attr/colorErrorContainer"
                 android:src="@drawable/ic_warning"
                 app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
@@ -31,9 +37,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="12dp"
                 android:text="🚨 ВИРУС ОБНАРУЖЕН! 🚨"
-                android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium"
+                android:textSize="16sp"
                 android:textColor="?attr/colorError"
                 android:textStyle="bold"
                 android:gravity="center" />
@@ -42,17 +48,17 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/large_margin"
-                app:cardCornerRadius="@dimen/card_corner_radius"
-                app:cardElevation="8dp"
-                app:strokeWidth="2dp"
+                android:layout_marginBottom="12dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:strokeWidth="1dp"
                 app:strokeColor="?attr/colorError">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="@dimen/card_padding">
+                    android:padding="12dp">
 
                     <!-- App Icon and Name -->
                     <LinearLayout
@@ -60,13 +66,13 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:gravity="center_vertical"
-                        android:layout_marginBottom="16dp">
+                        android:layout_marginBottom="12dp">
 
                         <com.google.android.material.imageview.ShapeableImageView
-                            android:id="@+id/overlay_icon"
-                            android:layout_width="@dimen/app_icon_size"
-                            android:layout_height="@dimen/app_icon_size"
-                            android:layout_marginEnd="@dimen/medium_margin"
+                            android:id="@+id/virus_icon"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_marginEnd="12dp"
                             android:background="?attr/colorSurfaceVariant"
                             app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Medium" />
 
@@ -77,20 +83,20 @@
                             android:orientation="vertical">
 
                             <TextView
-                                android:id="@+id/overlay_app_name"
+                                android:id="@+id/virus_app_name"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Вредоносное приложение"
-                                android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+                                android:textSize="14sp"
                                 android:textColor="?attr/colorOnSurface"
                                 android:textStyle="bold" />
 
                             <TextView
-                                android:id="@+id/overlay_package"
+                                android:id="@+id/virus_package"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="package.name"
-                                android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                                android:textSize="12sp"
                                 android:textColor="?attr/colorOnSurfaceVariant" />
 
                         </LinearLayout>
@@ -101,26 +107,26 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/large_margin"
-                        android:text="⚠️ Это приложение может навредить вашему устройству и вашим данным. Рекомендуется немедленно удалить его."
-                        android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+                        android:layout_marginBottom="12dp"
+                        android:text="⚠️ Это приложение может навредить вашему устройству. Рекомендуется немедленно удалить его."
+                        android:textSize="12sp"
                         android:textColor="?attr/colorOnSurface"
                         android:gravity="center" />
 
                     <!-- Delete Button -->
                     <com.google.android.material.button.MaterialButton
-                        android:id="@+id/overlay_delete_button"
+                        android:id="@+id/virus_delete_button"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:minHeight="@dimen/button_min_height"
+                        android:minHeight="40dp"
                         android:text="🗑️ УДАЛИТЬ ВИРУС"
-                        android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
+                        android:textSize="12sp"
                         android:textStyle="bold"
                         app:icon="@drawable/ic_delete"
                         app:iconGravity="textStart"
-                        app:iconPadding="12dp"
+                        app:iconPadding="8dp"
                         app:iconTint="?attr/colorOnError"
-                        app:cornerRadius="32dp"
+                        app:cornerRadius="20dp"
                         app:backgroundTint="?attr/colorError" />
 
                 </LinearLayout>
@@ -131,7 +137,7 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="16dp"
+                app:cardCornerRadius="12dp"
                 app:cardElevation="2dp"
                 app:strokeWidth="1dp"
                 app:strokeColor="?attr/colorOutline">
@@ -140,21 +146,21 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="16dp">
+                    android:padding="12dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
+                        android:layout_marginBottom="6dp"
                         android:text="ℹ️ Информация о безопасности"
-                        android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
+                        android:textSize="12sp"
                         android:textColor="?attr/colorOnSurface" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="QUANTIVIRUS обнаружил потенциально опасное приложение. После удаления рекомендуется перезагрузить устройство."
-                        android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                        android:textSize="11sp"
                         android:textColor="?attr/colorOnSurfaceVariant" />
 
                 </LinearLayout>
@@ -165,4 +171,4 @@
 
     </androidx.core.widget.NestedScrollView>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout> 
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

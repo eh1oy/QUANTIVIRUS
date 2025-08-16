@@ -10,24 +10,24 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center"
-        android:padding="@dimen/screen_padding">
+        android:padding="8dp">
 
         <ImageView
             android:id="@+id/virus_icon"
-            android:layout_width="@dimen/virus_icon_size"
-            android:layout_height="@dimen/virus_icon_size"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_gravity="center"
-            android:layout_marginBottom="@dimen/medium_margin" />
+            android:layout_marginBottom="12dp" />
 
         <TextView
             android:id="@+id/virus_app_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Вирус обнаружен!"
-            android:textSize="@dimen/large_text_size"
+            android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="#FFFFFF"
-            android:layout_marginBottom="@dimen/small_margin"
+            android:layout_marginBottom="4dp"
             android:gravity="center" />
 
         <TextView
@@ -35,24 +35,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="package.name"
-            android:textSize="@dimen/medium_text_size"
+            android:textSize="12sp"
             android:textColor="#FFCDD2"
-            android:layout_marginBottom="@dimen/large_margin"
+            android:layout_marginBottom="16dp"
             android:gravity="center" />
 
         <Button
             android:id="@+id/virus_delete_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="@dimen/button_min_height"
+            android:minHeight="40dp"
             android:text="Удалить вирус"
             android:textAllCaps="true"
             android:backgroundTint="#D32F2F"
             android:textColor="#FFFFFF"
             android:textStyle="bold"
-            android:textSize="@dimen/button_text_size"
-            android:padding="@dimen/button_padding" />
+            android:textSize="14sp"
+            android:padding="8dp" />
 
     </LinearLayout>
 
-</ScrollView> 
+</ScrollView>

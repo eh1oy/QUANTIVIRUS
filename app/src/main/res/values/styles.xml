@@ -1,24 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Стиль для скругленной иконки -->
-    <style name="RoundedImageView" parent="">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">50%</item>
-    </style>
-    
-    <!-- Стиль для Material You кнопок -->
-    <style name="MaterialYouButton" parent="Widget.Material3.Button">
-        <item name="android:textSize">16sp</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textAllCaps">true</item>
+    <!-- Material You Button Styles -->
+    <style name="Widget.Material3.Button.MaterialYou" parent="Widget.Material3.Button">
         <item name="cornerRadius">16dp</item>
-        <item name="android:minHeight">56dp</item>
+        <item name="android:textAppearance">@style/TextAppearance.Material3.LabelLarge</item>
+        <item name="backgroundTint">?attr/colorPrimaryContainer</item>
+        <item name="android:textColor">?attr/colorOnPrimaryContainer</item>
+        <item name="iconTint">?attr/colorOnPrimaryContainer</item>
     </style>
-    
-    <!-- Стиль для Material You карточек -->
-    <style name="MaterialYouCard" parent="Widget.Material3.CardView.Elevated">
+
+    <style name="Widget.Material3.Button.OutlinedButton.MaterialYou" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="cornerRadius">16dp</item>
+        <item name="android:textAppearance">@style/TextAppearance.Material3.LabelLarge</item>
+        <item name="backgroundTint">?attr/colorSurface</item>
+        <item name="strokeColor">?attr/colorOutline</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+        <item name="iconTint">?attr/colorOnSurface</item>
+    </style>
+
+    <!-- Material You Card Styles -->
+    <style name="Widget.Material3.CardView.MaterialYou" parent="Widget.Material3.CardView.Elevated">
         <item name="cardCornerRadius">28dp</item>
-        <item name="cardElevation">16dp</item>
-        <item name="strokeWidth">2dp</item>
+        <item name="cardElevation">0dp</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="strokeColor">?attr/colorOutlineVariant</item>
+        <item name="cardBackgroundColor">?attr/colorSurfaceVariant</item>
+    </style>
+
+
+
+    <!-- Material You Text Styles -->
+    <style name="TextAppearance.Material3.HeadlineMedium.MaterialYou" parent="TextAppearance.Material3.HeadlineMedium">
+        <item name="android:textColor">?attr/colorOnSurface</item>
+    </style>
+
+    <style name="TextAppearance.Material3.TitleLarge.MaterialYou" parent="TextAppearance.Material3.TitleLarge">
+        <item name="android:textColor">?attr/colorOnSurfaceVariant</item>
+    </style>
+
+    <style name="TextAppearance.Material3.TitleMedium.MaterialYou" parent="TextAppearance.Material3.TitleMedium">
+        <item name="android:textColor">?attr/colorOnSurface</item>
+    </style>
+
+    <style name="TextAppearance.Material3.BodyMedium.MaterialYou" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:textColor">?attr/colorOnSurfaceVariant</item>
+    </style>
+
+    <style name="TextAppearance.Material3.LabelLarge.MaterialYou" parent="TextAppearance.Material3.LabelLarge">
+        <item name="android:textColor">?attr/colorOnPrimaryContainer</item>
     </style>
 </resources> 

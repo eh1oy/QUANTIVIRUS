@@ -1,26 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorSurface">
+    android:background="?attr/colorSurface"
+    tools:context=".MainActivity">
 
-    <!-- Top App Bar -->
+    <!-- App Bar -->
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorSurface"
+        android:background="@android:color/transparent"
         app:elevation="0dp">
 
-        <TextView
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/topAppBar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:text="QUANTIVIRUS"
-            android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium"
-            android:textColor="?attr/colorOnSurface"
-            android:background="?attr/colorSurface"
-            android:gravity="center_vertical|center_horizontal"
-            android:padding="16dp" />
+            app:title="QUANTIVIRUS"
+            app:titleTextAppearance="@style/TextAppearance.Material3.HeadlineMedium"
+            app:titleTextColor="?attr/colorOnSurface"
+            app:backgroundTint="@android:color/transparent"
+            app:navigationIcon="@drawable/ic_shield"
+            app:navigationIconTint="?attr/colorPrimary" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -42,9 +46,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
                 app:cardCornerRadius="28dp"
-                app:cardElevation="2dp"
+                app:cardElevation="0dp"
                 app:strokeWidth="1dp"
-                app:strokeColor="?attr/colorOutline">
+                app:strokeColor="?attr/colorOutlineVariant"
+                app:cardBackgroundColor="?attr/colorSurfaceVariant">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -52,57 +57,52 @@
                     android:orientation="vertical"
                     android:padding="24dp">
 
-                    <!-- Status Icon -->
-                    <com.google.android.material.imageview.ShapeableImageView
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginBottom="20dp"
-                        android:background="@drawable/shield_status_background"
-                        android:src="@drawable/ic_shield"
-                        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
-                        app:tint="#4CAF50" />
-
-                    <!-- Status Text -->
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginBottom="20dp"
-                        android:text="🛡️ СТАТУС ЗАЩИТЫ"
-                        android:textAppearance="@style/TextAppearance.Material3.HeadlineSmall"
-                        android:textColor="#2E7D32"
-                        android:textStyle="bold" />
-
-                    <!-- Antivirus Switch -->
+                    <!-- Status Header -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:gravity="center_vertical"
-                        android:padding="16dp"
-                        android:background="?attr/colorSurfaceVariant"
-                        android:backgroundTint="?attr/colorSurfaceVariant">
+                        android:layout_marginBottom="16dp">
 
-                        <TextView
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            app:cardCornerRadius="24dp"
+                            app:cardBackgroundColor="?attr/colorPrimaryContainer"
+                            app:cardElevation="0dp">
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_shield"
+                                android:tint="?attr/colorOnPrimaryContainer" />
+
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="🛡️ Антивирус ВСЕГДА АКТИВЕН"
-                            android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
-                            android:textColor="#2E7D32"
-                            android:textStyle="bold" />
+                            android:orientation="vertical"
+                            android:layout_marginStart="16dp">
 
-                        <com.google.android.material.switchmaterial.SwitchMaterial
-                            android:id="@+id/antivirus_switch"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:checked="true"
-                            android:enabled="false"
-                            app:thumbTint="#4CAF50"
-                            app:trackTint="#4CAF50"
-                            app:thumbIcon="@drawable/ic_check"
-                            app:thumbIconTint="#FFFFFF" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Защита активна"
+                                android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+                                android:textColor="?attr/colorOnSurfaceVariant" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="QUANTIVIRUS защищает ваше устройство"
+                                android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                                android:textColor="?attr/colorOnSurfaceVariant" />
+
+                        </LinearLayout>
 
                     </LinearLayout>
 
@@ -112,12 +112,38 @@
 
             <!-- Quick Actions -->
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Действия"
+                android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                android:textColor="?attr/colorOnSurface"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Check Updates Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/check_updates_button"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:text="Быстрые действия"
-                android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
-                android:textColor="?attr/colorOnSurface" />
+                android:text="Проверить обновления"
+                android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
+                app:icon="@drawable/ic_update"
+                app:iconGravity="textStart"
+                app:iconPadding="12dp"
+                app:cornerRadius="16dp"
+                app:backgroundTint="?attr/colorSecondaryContainer"
+                app:iconTint="?attr/colorOnSecondaryContainer"
+                android:textColor="?attr/colorOnSecondaryContainer"
+                style="@style/Widget.Material3.Button" />
+
+            <!-- Links Section -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Полезные ссылки"
+                android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                android:textColor="?attr/colorOnSurface"
+                android:layout_marginBottom="16dp" />
 
             <!-- GitHub Button -->
             <com.google.android.material.button.MaterialButton
@@ -125,15 +151,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
-                android:padding="16dp"
                 android:text="GitHub"
                 android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
                 app:icon="@drawable/ic_github"
                 app:iconGravity="textStart"
                 app:iconPadding="12dp"
-                app:iconTint="?attr/colorOnPrimary"
-                app:cornerRadius="28dp"
-                app:backgroundTint="?attr/colorPrimary" />
+                app:cornerRadius="16dp"
+                app:backgroundTint="?attr/colorSurface"
+                app:strokeColor="?attr/colorOutline"
+                app:strokeWidth="1dp"
+                app:iconTint="?attr/colorOnSurface"
+                android:textColor="?attr/colorOnSurface"
+                style="@style/Widget.Material3.Button.OutlinedButton" />
 
             <!-- Website Button -->
             <com.google.android.material.button.MaterialButton
@@ -141,15 +170,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
-                android:padding="16dp"
-                android:text="Сайт"
+                android:text="Официальный сайт"
                 android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
                 app:icon="@drawable/ic_web"
                 app:iconGravity="textStart"
                 app:iconPadding="12dp"
-                app:iconTint="?attr/colorOnSecondary"
-                app:cornerRadius="28dp"
-                app:backgroundTint="?attr/colorSecondary" />
+                app:cornerRadius="16dp"
+                app:backgroundTint="?attr/colorSurface"
+                app:strokeColor="?attr/colorOutline"
+                app:strokeWidth="1dp"
+                app:iconTint="?attr/colorOnSurface"
+                android:textColor="?attr/colorOnSurface"
+                style="@style/Widget.Material3.Button.OutlinedButton" />
 
             <!-- Telegram Button -->
             <com.google.android.material.button.MaterialButton
@@ -157,45 +189,50 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
-                android:padding="16dp"
                 android:text="Telegram канал"
                 android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
                 app:icon="@drawable/ic_telegram"
                 app:iconGravity="textStart"
                 app:iconPadding="12dp"
-                app:iconTint="?attr/colorOnTertiary"
-                app:cornerRadius="28dp"
-                app:backgroundTint="?attr/colorTertiary" />
+                app:cornerRadius="16dp"
+                app:backgroundTint="?attr/colorSurface"
+                app:strokeColor="?attr/colorOutline"
+                app:strokeWidth="1dp"
+                app:iconTint="?attr/colorOnSurface"
+                android:textColor="?attr/colorOnSurface"
+                style="@style/Widget.Material3.Button.OutlinedButton" />
 
             <!-- Info Card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="16dp"
-                app:cardElevation="1dp"
+                app:cardElevation="0dp"
                 app:strokeWidth="1dp"
-                app:strokeColor="?attr/colorOutline">
+                app:strokeColor="?attr/colorOutlineVariant"
+                app:cardBackgroundColor="?attr/colorTertiaryContainer">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
+                    android:orientation="horizontal"
+                    android:padding="16dp"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_info"
+                        android:tint="?attr/colorOnTertiaryContainer"
+                        android:layout_marginEnd="12dp" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:text="ℹ️ Информация"
-                        android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
-                        android:textColor="?attr/colorOnSurface" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="QUANTIVIRUS защищает ваше устройство от вредоносных приложений в реальном времени."
+                        android:layout_weight="1"
+                        android:text="Версия 1.1 • Защита активна"
                         android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
-                        android:textColor="?attr/colorOnSurfaceVariant" />
+                        android:textColor="?attr/colorOnTertiaryContainer" />
 
                 </LinearLayout>
 
@@ -204,16 +241,5 @@
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
-
-    <!-- Floating Action Button -->
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_scan"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="24dp"
-        android:src="@drawable/ic_scan"
-        app:backgroundTint="?attr/colorPrimaryContainer"
-        app:tint="?attr/colorOnPrimaryContainer" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout> 

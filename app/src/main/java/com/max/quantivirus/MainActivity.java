@@ -18,26 +18,44 @@ import android.os.Looper;
 import android.provider.Settings;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.TextView;
 import java.util.List;
 
-import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class MainActivity extends AppCompatActivity {
-    private SwitchMaterial antivirusSwitch;
-    private MaterialButton githubButton, siteButton, telegramButton;
-    private FloatingActionButton fabScan;
+    private MaterialButton githubButton, siteButton, telegramButton, checkUpdatesButton;
     private SharedPreferences prefs;
     private static final String PREFS_NAME = "quantivirus_prefs";
     private static final String KEY_ANTIVIRUS_ENABLED = "antivirus_enabled";
     private Handler serviceMonitor;
     private static final long MONITOR_INTERVAL = 1000; // 1 секунда
     private boolean isDestroyed = false;
+    private UpdateChecker updateChecker;
     
     // Константы для разрешений
     private static final int OVERLAY_PERMISSION_REQUEST_CODE = 1234;
     private static final int BATTERY_OPTIMIZATION_REQUEST_CODE = 5678;
+    private static final int STORAGE_PERMISSION_REQUEST_CODE = 9012;
+    private static final int INSTALL_PACKAGES_REQUEST_CODE = 3456;
+    
+    // Ключи для SharedPreferences (чтобы диалоги показывались только один раз)
+    private static final String KEY_OVERLAY_PERMISSION_SHOWN = "overlay_permission_shown";
+    private static final String KEY_BATTERY_PERMISSION_SHOWN = "battery_permission_shown";
+    private static final String KEY_INSTALL_PERMISSION_SHOWN = "install_permission_shown";
+    
+    // Массив разрешений для загрузки и установки
+    private static final String[] DOWNLOAD_PERMISSIONS = {
+        android.Manifest.permission.REQUEST_INSTALL_PACKAGES
+    };
+    
+    // Разрешения для старых версий Android (до API 29)
+    private static final String[] LEGACY_STORAGE_PERMISSIONS = {
+        android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        android.Manifest.permission.READ_EXTERNAL_STORAGE
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,21 +89,12 @@ public class MainActivity extends AppCompatActivity {
             boolean enabled = prefs.getBoolean(KEY_ANTIVIRUS_ENABLED, true);
 
             // Находим UI элементы
-            antivirusSwitch = findViewById(R.id.antivirus_switch);
             githubButton = findViewById(R.id.github_button);
             siteButton = findViewById(R.id.site_button);
             telegramButton = findViewById(R.id.telegram_button);
-            fabScan = findViewById(R.id.fab_scan);
+            checkUpdatesButton = findViewById(R.id.check_updates_button);
 
-            // Проверяем, что все элементы найдены
-            if (antivirusSwitch == null) {
-                Toast.makeText(this, "Ошибка инициализации UI", Toast.LENGTH_SHORT).show();
-                return;
-            }
 
-            // Настраиваем переключатель - ВСЕГДА ВКЛЮЧЕН
-            antivirusSwitch.setChecked(true);
-            antivirusSwitch.setEnabled(false); // Делаем неактивным
             
             // Проверяем и запрашиваем необходимые разрешения
             checkAndRequestPermissions();
@@ -99,34 +108,13 @@ public class MainActivity extends AppCompatActivity {
             // Запускаем мониторинг сервиса для автономности
             startServiceMonitoring();
 
-            antivirusSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    try {
-                        // Фейковый переключатель - всегда возвращаем в положение ВКЛ
-                        antivirusSwitch.setChecked(true);
-                        prefs.edit().putBoolean(KEY_ANTIVIRUS_ENABLED, true).apply();
-                        
-                        // Показываем сообщение о том, что антивирус всегда активен
-                        Toast.makeText(MainActivity.this, "🛡️ QUANTIVIRUS всегда активен и защищает ваше устройство!", Toast.LENGTH_LONG).show();
-                        if (isChecked) {
-                            startAntivirus();
-                            Toast.makeText(MainActivity.this, "Антивирус включен", Toast.LENGTH_SHORT).show();
-                        } else {
-                            stopAntivirus();
-                            Toast.makeText(MainActivity.this, "Антивирус выключен", Toast.LENGTH_SHORT).show();
-                        }
-                    } catch (Exception e) {
-                        android.util.Log.e("MainActivity", "Error in switch listener: " + e.getMessage());
-                    }
-                }
-            });
+
 
             // Настраиваем кнопки
             if (githubButton != null) {
                 githubButton.setOnClickListener(v -> {
                     try {
-                        openUrl("https://github.com/eh1oy");
+                        openUrl("https://github.com/eh1oy/QUANTIVIRUS/");
                     } catch (Exception e) {
                         android.util.Log.e("MainActivity", "Error opening GitHub: " + e.getMessage());
                     }
@@ -153,17 +141,25 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
 
-            // Настраиваем FAB
-            if (fabScan != null) {
-                fabScan.setOnClickListener(v -> {
+            if (checkUpdatesButton != null) {
+                checkUpdatesButton.setOnClickListener(v -> {
                     try {
-                        startAntivirus();
-                        Toast.makeText(this, "Запущено сканирование", Toast.LENGTH_SHORT).show();
+                        checkUpdatesButton.setEnabled(false);
+                        checkUpdatesButton.setText("Проверяю...");
+                        checkForUpdates();
+                        Toast.makeText(this, "Проверка обновлений...", Toast.LENGTH_SHORT).show();
                     } catch (Exception e) {
-                        android.util.Log.e("MainActivity", "Error starting scan: " + e.getMessage());
+                        android.util.Log.e("MainActivity", "Error checking updates: " + e.getMessage());
+                        Toast.makeText(this, "Ошибка проверки обновлений", Toast.LENGTH_SHORT).show();
+                        checkUpdatesButton.setEnabled(true);
+                        checkUpdatesButton.setText("Проверить обновления");
                     }
                 });
             }
+
+
+
+
 
             // Запрашиваем разрешения
             requestPermissions();
@@ -173,6 +169,9 @@ public class MainActivity extends AppCompatActivity {
             
             // Запускаем мониторинг сервиса
             startServiceMonitoring();
+            
+            // Инициализируем проверку обновлений (без автоматического запуска)
+            initUpdateChecker();
 
         } catch (Exception e) {
             android.util.Log.e("MainActivity", "Error in onCreate: " + e.getMessage());
@@ -475,35 +474,29 @@ public class MainActivity extends AppCompatActivity {
         // Не останавливаем мониторинг при остановке
     }
     
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        
-        isDestroyed = true;
-        
-        // Останавливаем мониторинг при уничтожении активности
-        if (serviceMonitor != null) {
-            serviceMonitor.removeCallbacksAndMessages(null);
-        }
-    }
+
     
     /**
      * Проверяет и запрашивает необходимые разрешения
      */
     private void checkAndRequestPermissions() {
+        // Проверяем разрешения для загрузки
+        checkDownloadPermissions();
+        
+        // Проверяем остальные разрешения
         try {
-            // Проверяем разрешение на оверлей
+            // Проверяем разрешение на оверлей (показываем диалог только один раз)
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                if (!Settings.canDrawOverlays(this)) {
+                if (!Settings.canDrawOverlays(this) && !prefs.getBoolean(KEY_OVERLAY_PERMISSION_SHOWN, false)) {
                     requestOverlayPermission();
                 }
             }
             
-            // Проверяем игнорирование оптимизации батареи
+            // Проверяем игнорирование оптимизации батареи (показываем диалог только один раз)
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
                 String packageName = getPackageName();
                 android.os.PowerManager pm = (android.os.PowerManager) getSystemService(Context.POWER_SERVICE);
-                if (pm != null && !pm.isIgnoringBatteryOptimizations(packageName)) {
+                if (pm != null && !pm.isIgnoringBatteryOptimizations(packageName) && !prefs.getBoolean(KEY_BATTERY_PERMISSION_SHOWN, false)) {
                     requestBatteryOptimizationPermission();
                 }
             }
@@ -513,10 +506,51 @@ public class MainActivity extends AppCompatActivity {
     }
     
     /**
+     * Проверяет разрешения для загрузки и установки
+     */
+    private void checkDownloadPermissions() {
+        try {
+            // Для Android 10+ (API 29+) разрешения на хранилище не нужны для DownloadManager
+            if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.Q) {
+                // Проверяем разрешения на хранилище только для старых версий
+                boolean legacyPermissionsGranted = true;
+                for (String permission : LEGACY_STORAGE_PERMISSIONS) {
+                    if (ContextCompat.checkSelfPermission(this, permission) 
+                            != PackageManager.PERMISSION_GRANTED) {
+                        legacyPermissionsGranted = false;
+                        break;
+                    }
+                }
+                
+                if (!legacyPermissionsGranted) {
+                    ActivityCompat.requestPermissions(this, LEGACY_STORAGE_PERMISSIONS, STORAGE_PERMISSION_REQUEST_CODE);
+                }
+            }
+            
+            // Проверяем разрешение на установку пакетов (показываем диалог только один раз)
+            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.REQUEST_INSTALL_PACKAGES) 
+                    != PackageManager.PERMISSION_GRANTED && !prefs.getBoolean(KEY_INSTALL_PERMISSION_SHOWN, false)) {
+                // Для Android 6+ запрашиваем разрешение
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                    ActivityCompat.requestPermissions(this, DOWNLOAD_PERMISSIONS, INSTALL_PACKAGES_REQUEST_CODE);
+                } else {
+                    // Для старых версий показываем инструкции
+                    showInstallPermissionInstructions();
+                }
+            }
+        } catch (Exception e) {
+            android.util.Log.e("MainActivity", "Error checking download permissions: " + e.getMessage());
+        }
+    }
+    
+    /**
      * Запрашивает разрешение на отображение оверлея
      */
     private void requestOverlayPermission() {
         try {
+            // Сохраняем флаг, что диалог уже показан
+            prefs.edit().putBoolean(KEY_OVERLAY_PERMISSION_SHOWN, true).apply();
+            
             new AlertDialog.Builder(this)
                 .setTitle("Разрешение на всплывающие окна")
                 .setMessage("Для работы предупреждений о вирусах необходимо разрешить приложению отображать всплывающие окна поверх других приложений.")
@@ -545,6 +579,9 @@ public class MainActivity extends AppCompatActivity {
      */
     private void requestBatteryOptimizationPermission() {
         try {
+            // Сохраняем флаг, что диалог уже показан
+            prefs.edit().putBoolean(KEY_BATTERY_PERMISSION_SHOWN, true).apply();
+            
             new AlertDialog.Builder(this)
                 .setTitle("Оптимизация батареи")
                 .setMessage("Для стабильной работы антивируса рекомендуется отключить оптимизацию батареи для этого приложения.")
@@ -565,6 +602,46 @@ public class MainActivity extends AppCompatActivity {
                 .show();
         } catch (Exception e) {
             android.util.Log.e("MainActivity", "Error showing battery optimization dialog: " + e.getMessage());
+        }
+    }
+    
+    /**
+     * Показывает инструкции для разрешения установки пакетов
+     */
+    private void showInstallPermissionInstructions() {
+        try {
+            // Сохраняем флаг, что диалог уже показан
+            prefs.edit().putBoolean(KEY_INSTALL_PERMISSION_SHOWN, true).apply();
+            
+            new AlertDialog.Builder(this)
+                .setTitle("Разрешение на установку приложений")
+                .setMessage("Для установки обновлений необходимо разрешить установку приложений из неизвестных источников.\n\n" +
+                          "1. Перейдите в Настройки → Безопасность\n" +
+                          "2. Включите 'Неизвестные источники'\n" +
+                          "3. Или разрешите установку для этого приложения")
+                .setPositiveButton("Настроить", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        try {
+                            Intent intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES);
+                            intent.setData(Uri.parse("package:" + getPackageName()));
+                            startActivityForResult(intent, INSTALL_PACKAGES_REQUEST_CODE);
+                        } catch (Exception e) {
+                            // Fallback для старых версий Android
+                            try {
+                                Intent intent = new Intent(Settings.ACTION_SECURITY_SETTINGS);
+                                startActivity(intent);
+                            } catch (Exception e2) {
+                                android.util.Log.e("MainActivity", "Error opening security settings: " + e2.getMessage());
+                            }
+                        }
+                    }
+                })
+                .setNegativeButton("Отмена", null)
+                .setCancelable(false)
+                .show();
+        } catch (Exception e) {
+            android.util.Log.e("MainActivity", "Error showing install permission dialog: " + e.getMessage());
         }
     }
     
@@ -603,6 +680,194 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(this, "⚠️ Оптимизация батареи не отключена. Приложение может быть остановлено системой.", Toast.LENGTH_LONG).show();
                 }
             }
+        }
+    }
+    
+    /**
+     * Сбрасывает флаги показа диалогов разрешений (для отладки)
+     */
+    private void resetPermissionFlags() {
+        try {
+            prefs.edit()
+                .putBoolean(KEY_OVERLAY_PERMISSION_SHOWN, false)
+                .putBoolean(KEY_BATTERY_PERMISSION_SHOWN, false)
+                .putBoolean(KEY_INSTALL_PERMISSION_SHOWN, false)
+                .apply();
+            android.util.Log.d("MainActivity", "Permission flags reset");
+        } catch (Exception e) {
+            android.util.Log.e("MainActivity", "Error resetting permission flags: " + e.getMessage());
+        }
+    }
+    
+    /**
+     * Инициализирует проверку обновлений
+     */
+    private void initUpdateChecker() {
+        try {
+            updateChecker = new UpdateChecker(this);
+            // Автоматическая проверка обновлений при запуске
+            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                checkForUpdates();
+            }, 3000); // Проверка через 3 секунды после запуска
+        } catch (Exception e) {
+            android.util.Log.e("MainActivity", "Error initializing update checker: " + e.getMessage());
+        }
+    }
+    
+    
+
+    /**
+     * Проверяет наличие обновлений
+     */
+    private void checkForUpdates() {
+        try {
+            if (updateChecker != null) {
+                updateChecker.checkForUpdates(new UpdateChecker.UpdateCallback() {
+                    @Override
+                    public void onUpdateAvailable(String serverVersion) {
+                        checkUpdatesButton.setEnabled(true);
+                        checkUpdatesButton.setText("Проверить обновления");
+                        showUpdateDialog(serverVersion);
+                    }
+                    
+                    @Override
+                    public void onNoUpdateAvailable() {
+                        android.util.Log.d("MainActivity", "No updates available");
+                        checkUpdatesButton.setEnabled(true);
+                        checkUpdatesButton.setText("Проверить обновления");
+                        Toast.makeText(MainActivity.this, "✅ У вас установлена последняя версия", Toast.LENGTH_LONG).show();
+                    }
+                    
+                    @Override
+                    public void onError(String error) {
+                        android.util.Log.e("MainActivity", "Update check error: " + error);
+                        checkUpdatesButton.setEnabled(true);
+                        checkUpdatesButton.setText("Проверить обновления");
+                        Toast.makeText(MainActivity.this, "❌ Ошибка проверки обновлений: " + error, Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+        } catch (Exception e) {
+            android.util.Log.e("MainActivity", "Error checking for updates: " + e.getMessage());
+            Toast.makeText(this, "❌ Ошибка проверки обновлений", Toast.LENGTH_LONG).show();
+        }
+    }
+    
+    /**
+     * Показывает диалог обновления
+     */
+    private void showUpdateDialog(String serverVersion) {
+        try {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_update_available, null);
+            builder.setView(dialogView);
+            
+            // Настраиваем тексты версий
+            TextView currentVersionText = dialogView.findViewById(R.id.current_version_text);
+            TextView newVersionText = dialogView.findViewById(R.id.new_version_text);
+            
+            String currentVersion = "1.1"; // Текущая версия приложения
+            currentVersionText.setText("Текущая версия: " + currentVersion);
+            newVersionText.setText("Новая версия: " + serverVersion);
+            
+            // Настраиваем кнопки
+            MaterialButton btnLater = dialogView.findViewById(R.id.btn_later);
+            MaterialButton btnUpdate = dialogView.findViewById(R.id.btn_update);
+            
+            AlertDialog dialog = builder.create();
+            dialog.setCancelable(false);
+            
+            btnLater.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                    Toast.makeText(MainActivity.this, "Обновление отложено", Toast.LENGTH_SHORT).show();
+                }
+            });
+            
+            btnUpdate.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                    startUpdate();
+                }
+            });
+            
+            dialog.show();
+            
+        } catch (Exception e) {
+            android.util.Log.e("MainActivity", "Error showing update dialog: " + e.getMessage());
+        }
+    }
+    
+    /**
+     * Запускает процесс обновления
+     */
+    private void startUpdate() {
+        try {
+            if (updateChecker != null) {
+                updateChecker.downloadUpdate();
+            }
+        } catch (Exception e) {
+            android.util.Log.e("MainActivity", "Error starting update: " + e.getMessage());
+            Toast.makeText(this, "Ошибка запуска обновления", Toast.LENGTH_LONG).show();
+        }
+    }
+    
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        
+        try {
+            if (requestCode == STORAGE_PERMISSION_REQUEST_CODE) {
+                boolean allGranted = true;
+                for (int result : grantResults) {
+                    if (result != PackageManager.PERMISSION_GRANTED) {
+                        allGranted = false;
+                        break;
+                    }
+                }
+                
+                if (allGranted) {
+                    Toast.makeText(this, "✅ Разрешения на хранилище получены", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "⚠️ Разрешения на хранилище не получены. Загрузка может не работать на старых версиях Android.", Toast.LENGTH_LONG).show();
+                }
+            } else if (requestCode == INSTALL_PACKAGES_REQUEST_CODE) {
+                boolean allGranted = true;
+                for (int result : grantResults) {
+                    if (result != PackageManager.PERMISSION_GRANTED) {
+                        allGranted = false;
+                        break;
+                    }
+                }
+                
+                if (allGranted) {
+                    Toast.makeText(this, "✅ Разрешение на установку пакетов получено", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "⚠️ Разрешение на установку пакетов не получено. Обновления нужно будет устанавливать вручную.", Toast.LENGTH_LONG).show();
+                    showInstallPermissionInstructions();
+                }
+            }
+        } catch (Exception e) {
+            android.util.Log.e("MainActivity", "Error handling permission result: " + e.getMessage());
+        }
+    }
+    
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        
+        isDestroyed = true;
+        
+        // Останавливаем мониторинг при уничтожении активности
+        if (serviceMonitor != null) {
+            serviceMonitor.removeCallbacksAndMessages(null);
+        }
+        
+        // Останавливаем проверку обновлений
+        if (updateChecker != null) {
+            updateChecker.shutdown();
         }
     }
 } 

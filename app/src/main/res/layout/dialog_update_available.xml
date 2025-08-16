@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="@dimen/card_padding"
+    android:background="@drawable/main_card_background">
+
+    <!-- Иконка обновления -->
+    <ImageView
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/medium_margin"
+        android:background="@drawable/warning_icon_background"
+        android:src="@drawable/ic_info"
+        android:tint="#2196F3"
+        android:scaleType="centerInside"
+        android:padding="16dp" />
+
+    <!-- Заголовок -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/small_margin"
+        android:text="🔄 Доступно обновление"
+        android:textSize="@dimen/xlarge_text_size"
+        android:textColor="#2196F3"
+        android:textStyle="bold"
+        android:gravity="center" />
+
+    <!-- Информация о версии -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/large_margin"
+        android:text="Доступна новая версия QUANTIVIRUS"
+        android:textSize="@dimen/medium_text_size"
+        android:textColor="#424242"
+        android:gravity="center" />
+
+    <!-- Версии -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginBottom="@dimen/large_margin">
+
+        <TextView
+            android:id="@+id/current_version_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Текущая версия: 1.1"
+            android:textSize="@dimen/small_text_size"
+            android:textColor="#757575"
+            android:layout_marginEnd="@dimen/medium_margin" />
+
+        <TextView
+            android:id="@+id/new_version_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Новая версия: 1.2"
+            android:textSize="@dimen/small_text_size"
+            android:textColor="#4CAF50"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <!-- Кнопки -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/btn_later"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginEnd="@dimen/small_margin"
+            android:text="Позже"
+            android:textSize="@dimen/button_text_size"
+            android:backgroundTint="#757575"
+            android:textColor="#FFFFFF"
+            android:minHeight="@dimen/button_min_height" />
+
+        <Button
+            android:id="@+id/btn_update"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="@dimen/small_margin"
+            android:text="Обновить"
+            android:textSize="@dimen/button_text_size"
+            android:backgroundTint="#2196F3"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:minHeight="@dimen/button_min_height" />
+
+    </LinearLayout>
+
+</LinearLayout>
